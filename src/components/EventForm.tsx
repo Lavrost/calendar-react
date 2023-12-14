@@ -1,8 +1,13 @@
 import React, {FC} from 'react';
 import {Button, DatePicker, Form, Input, Row, Select} from "antd";
 import {rules} from "../utils/rules";
+import {IUser} from "../models/IUser";
 
-const EventForm: FC = () => {
+interface EventFormProps {
+    guests: IUser[];
+}
+
+const EventForm: FC<EventFormProps> = (props) => {
     return (
         <Form>
             <Form.Item
@@ -25,12 +30,15 @@ const EventForm: FC = () => {
                 rules={[rules.required()]}
             >
                 <Select
-                    options={[
-                        { value: 'jack', label: 'Jack' },
-                        { value: 'lucy', label: 'Lucy' },
-                        { value: 'Yiminghe', label: 'yiminghe' },
-                        { value: 'disabled', label: 'Disabled', disabled: true },
-                    ]}
+                    options={
+                        props.guests.map(
+                            (guest) => ({
+                                label: guest.username,
+                                value: guest.username,
+                                key: guest.username
+                            })
+                        )
+                    }
                 />
             </Form.Item>
             <Row justify="end">
