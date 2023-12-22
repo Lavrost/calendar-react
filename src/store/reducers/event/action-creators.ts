@@ -18,11 +18,23 @@ export const EventActionCreators = {
     },
     createEvent: (event: IEvent) => async (dispatch: AppDispatch) => {
         try {
-            const events = localStorage.getItem("events") || '[]';
+            const events = localStorage.getItem("events") || '[]'; // TODO: повторение кода(см ниже), вынести
             const jsonEvents = JSON.parse(events) as IEvent[];
             jsonEvents.push(event);
             dispatch(EventActionCreators.setEvents(jsonEvents));
             localStorage.setItem("events", JSON.stringify(jsonEvents));
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    fetchEvents: (username: string) => async (dispatch: AppDispatch)=> {
+        try {
+            const events = localStorage.getItem("events") || '[]';
+            const jsonEvents = JSON.parse(events) as IEvent[];
+            const currentUserEvents = jsonEvents.filter(
+                ev => ev.author === username || ev.guest === username
+            );
+            dispatch(EventActionCreators.setEvents(currentUserEvents));
         } catch (e) {
             console.log(e);
         }
